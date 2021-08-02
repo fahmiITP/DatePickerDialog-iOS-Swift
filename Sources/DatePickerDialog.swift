@@ -31,7 +31,6 @@ open class DatePickerDialog: UIView {
 
     private var textColor: UIColor!
     private var buttonColor: UIColor!
-    private var viewBorderColor: UIColor!
     private var font: UIFont!
 
     private var container: UIView?
@@ -39,8 +38,8 @@ open class DatePickerDialog: UIView {
 
     // MARK: - Dialog initialization
     @objc public init(
-        textColor: UIColor? = getDefaultTextColor(),
-        buttonColor: UIColor? = getDefaultButtonColor(),
+        textColor: UIColor? = nil,
+        buttonColor: UIColor? = nil,
         font: UIFont = .boldSystemFont(ofSize: 15),
         locale: Locale? = nil,
         showCancelButton: Bool = true
@@ -49,12 +48,6 @@ open class DatePickerDialog: UIView {
         super.init(frame: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         self.textColor = textColor ?? Colors.text
         self.buttonColor = buttonColor ?? Colors.accent
-        if #available(iOS 13.0, *){
-            self.viewBorderColor =  UIColor.systemGray3
-        }
-        else{
-            self.viewBorderColor =  UIColor(red: 198/255, green: 198/255, blue: 198/255, alpha: 1)
-        }
         self.font = font
         self.showCancelButton = showCancelButton
         self.locale = locale
@@ -64,24 +57,6 @@ open class DatePickerDialog: UIView {
     @available(*, unavailable)
     @objc required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    public class func getDefaultTextColor() -> UIColor {
-        if #available(iOS 13.0, *){
-            return UIColor.label
-        }
-        else{
-            return UIColor.black
-        }
-    }
-    
-    public class func getDefaultButtonColor() -> UIColor {
-        if #available(iOS 13.0, *){
-            return UIColor.systemBlue
-        }
-        else{
-            return UIColor.blue
-        }
     }
 
     func setupView() {
@@ -215,27 +190,14 @@ open class DatePickerDialog: UIView {
 
         // First, we style the dialog to match the iOS8 UIAlertView >>>
         gradient.frame = container.bounds
-        if #available(iOS 13, *){
-             gradient.colors = [
-                 UIColor.secondarySystemBackground.cgColor,
-                 UIColor.systemBackground.cgColor,
-                 UIColor.secondarySystemBackground.cgColor
-             ]
-         }
-         else{
-             gradient.colors = [
-                 UIColor(red: 218/255, green: 218/255, blue: 218/255, alpha: 1).cgColor,
-                 UIColor(red: 233/255, green: 233/255, blue: 233/255, alpha: 1).cgColor,
-                 UIColor(red: 218/255, green: 218/255, blue: 218/255, alpha: 1).cgColor
-             ]
-         }
+        gradient.colors = Colors.gradientBackground
 
         let cornerRadius = kCornerRadius
         gradient.cornerRadius = cornerRadius
         container.layer.insertSublayer(gradient, at: 0)
 
         container.layer.cornerRadius = cornerRadius
-        container.layer.borderColor = viewBorderColor.cgColor
+        container.layer.borderColor = Colors.separator.cgColor
         container.layer.borderWidth = 1
         container.layer.shadowRadius = cornerRadius + 5
         container.layer.shadowOpacity = 0.1
@@ -255,7 +217,7 @@ open class DatePickerDialog: UIView {
             height: kDefaultButtonSpacerHeight
         ))
 
-        lineView.backgroundColor = viewBorderColor
+        lineView.backgroundColor = Colors.separator
         container.addSubview(lineView)
 
         //Title
@@ -276,7 +238,11 @@ open class DatePickerDialog: UIView {
 
     fileprivate func configuredDatePicker() -> UIDatePicker {
         let datePicker = UIDatePicker(frame: CGRect(x: 0, y: 30, width: 0, height: 0))
-        datePicker.setValue(self.textColor, forKeyPath: "textColor")
+        if #available(iOS 13.0, *) {
+            datePicker.overrideUserInterfaceStyle = .light
+        } else {
+            // Fallback on earlier versions
+        }
         datePicker.autoresizingMask = .flexibleRightMargin
         datePicker.frame.size.width = 300
         datePicker.frame.size.height = 216

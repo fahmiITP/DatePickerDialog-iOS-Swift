@@ -14,7 +14,7 @@ internal enum Colors {
 
     static var gradientBackground: [CGColor] {
         if #available(iOS 13.0, *) {
-            return [UIColor.systemGray4.cgColor, UIColor.systemGray5.cgColor, UIColor.systemGray5.cgColor]
+            return [UIColor(hexValue: 0xF2F2F7).cgColor, UIColor(hexValue: 0xFFFFFF).cgColor, UIColor(hexValue: 0xF2F2F7).cgColor]
         } else {
             return [UIColor(hexValue: 0xDADADE).cgColor, UIColor(hexValue: 0xEAEAEE).cgColor, UIColor(hexValue: 0xDADADE).cgColor]
         }
@@ -22,7 +22,7 @@ internal enum Colors {
 
     static var separator: UIColor {
         if #available(iOS 13.0, *) {
-            return UIColor.systemGray3
+            return UIColor(hexValue: 0xD1D1D6)
         } else {
             return UIColor(hexValue: 0xD1D1D6)
         }
@@ -30,7 +30,7 @@ internal enum Colors {
 
     static var text: UIColor {
         if #available(iOS 13.0, *) {
-            return UIColor.label
+            return UIColor(hexValue: 0x152334)
         } else {
             return UIColor(hexValue: 0x3993F8)
         }
@@ -38,7 +38,7 @@ internal enum Colors {
 
     static var accent: UIColor {
         if #available(iOS 13.0, *) {
-            return UIColor.systemBlue
+            return UIColor(hexValue: 0x152334)
         } else {
             return UIColor(hexValue: 0x3993F8)
         }
